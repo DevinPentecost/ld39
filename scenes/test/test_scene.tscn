@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://scripts/spinnyBoy.gd" type="Script" id=2]
+
+[node name="Test Sprite" type="Sprite"]
+
+transform/pos = Vector2( 329.5, 153 )
+transform/rot = -33.9
+transform/scale = Vector2( 2.79688, 2.28125 )
+texture = ExtResource( 1 )
+script/script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -31.0
+margin/top = 42.0
+margin/right = 24.0
+margin/bottom = 66.0
+text = "Dummy Scene"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+
