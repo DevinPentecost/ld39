@@ -2,11 +2,11 @@
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=2]
-[ext_resource path="res://scripts/player_controller.gd" type="Script" id=3]
-[ext_resource path="res://sprites/arrow.png" type="Texture" id=4]
-[ext_resource path="res://scripts/player_directional_arrow.gd" type="Script" id=5]
-[ext_resource path="res://scripts/ui_player_power.gd" type="Script" id=6]
-[ext_resource path="res://scripts/power_pad_controller.gd" type="Script" id=7]
+[ext_resource path="res://sprites/arrow.png" type="Texture" id=3]
+[ext_resource path="res://scripts/ui_player_power.gd" type="Script" id=4]
+[ext_resource path="res://scenes/objects/PowerPad.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/enemy_controller.gd" type="Script" id=6]
+[ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=7]
 
 [sub_resource type="FixedMaterial" id=1]
 
@@ -76,8 +76,8 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 0.787678, 0.616087, 0, -0.616087, 0.787678, 0, 2, 2 )
 projection = 1
 size = 1.0
-near = 0.1
-far = 100.0
+near = 0.01
+far = 200.0
 keep_aspect = 1
 current = true
 visible_layers = 1048575
@@ -110,37 +110,43 @@ shadow/max_distance = 0.0
 shadow/split_weight = 0.5
 shadow/zoffset_scale = 2.0
 
-[node name="Player" type="Position3D" parent="."]
+[node name="Player Power Bar" type="TextureProgress" parent="."]
+
+rect/scale = Vector2( 1, 0.5 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 200.0
+margin/bottom = 200.0
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 50.0
+range/exp_edit = false
+range/rounded = true
+texture/under = null
+texture/over = null
+texture/progress = ExtResource( 3 )
+radial_fill/fill_degrees = 360.0
+radial_fill/center_offset = Vector2( 0, 0 )
+script/script = ExtResource( 4 )
+
+[node name="PowerPad" parent="." instance=ExtResource( 5 )]
+
+[node name="Enemy" type="Position3D" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-script/script = ExtResource( 3 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.724243 )
+script/script = ExtResource( 6 )
 
-[node name="OmniLight" type="OmniLight" parent="Player"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481106, 0 )
-layers = 1
-params/enabled = true
-params/editor_only = false
-params/bake_mode = 0
-params/energy = 1.0
-colors/diffuse = Color( 0.484589, 0.522504, 0.925781, 1 )
-colors/specular = Color( 0.173721, 0.704435, 0.808594, 1 )
-shadow/shadow = false
-shadow/darkening = 0.0
-shadow/z_offset = 0.001
-shadow/z_slope_scale = 0.0
-shadow/esm_multiplier = 60.0
-shadow/blur_passes = 1.0
-projector = null
-operator = 0
-params/radius = 2.0
-params/attenuation = 1.0
-
-[node name="DirectionalArrow" type="Sprite3D" parent="Player"]
+[node name="Sprite3D" type="Sprite3D" parent="Enemy"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 0.1, 0 )
+transform/local = Transform( 0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.09, 0 )
 layers = 1
 geometry/visible = true
 geometry/material_override = null
@@ -166,98 +172,20 @@ axis = 1
 flags/transparent = true
 flags/shaded = false
 flags/alpha_cut = 0
-texture = ExtResource( 4 )
-vframes = 1
-hframes = 1
-frame = 0
-region = false
-region_rect = Rect2( 0, 0, 0, 0 )
-script/script = ExtResource( 5 )
-
-[node name="TestCube" type="TestCube" parent="."]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01721, -1.73175 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-
-[node name="Player Power Bar" type="TextureProgress" parent="."]
-
-rect/scale = Vector2( 1, 0.5 )
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 200.0
-margin/bottom = 200.0
-range/min = 0.0
-range/max = 100.0
-range/step = 1.0
-range/page = 0.0
-range/value = 50.0
-range/exp_edit = false
-range/rounded = true
-texture/under = null
-texture/over = null
-texture/progress = ExtResource( 4 )
-radial_fill/fill_degrees = 360.0
-radial_fill/center_offset = Vector2( 0, 0 )
-script/script = ExtResource( 6 )
-
-[node name="PowerPad" type="Position3D" parent="."]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.326416, 0, -0.384888 )
-script/script = ExtResource( 7 )
-
-[node name="Sprite" type="Sprite3D" parent="PowerPad"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.01, 0 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-centered = true
-offset = Vector2( 0, 0 )
-flip_h = false
-flip_v = false
-modulate = Color( 0.197571, 0.972656, 0.573003, 1 )
-opacity = 1.0
-pixel_size = 0.01
-axis = 1
-flags/transparent = true
-flags/shaded = false
-flags/alpha_cut = 1701277281
 texture = ExtResource( 1 )
 vframes = 1
 hframes = 1
 frame = 0
 region = false
 region_rect = Rect2( 0, 0, 0, 0 )
+
+[node name="Tween" type="Tween" parent="Enemy"]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[node name="Player" parent="." instance=ExtResource( 7 )]
 
 

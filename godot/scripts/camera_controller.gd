@@ -6,7 +6,7 @@ extends Camera
 
 var player = null
 var movement_rate = .9
-var offset = Vector3(0, 2, 2.15)
+var offset = Vector3(0, 2, 2.25)
 
 func _ready():
 	# Called every time the node is added to the scene.

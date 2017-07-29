@@ -9,11 +9,11 @@ var view_angle = 30
 
 var move_angle = 0
 var move_speed = 0
-var speed = .01
+var speed = .005
 var speed_threshold = 0.1
 
 #Dash related
-var dash_distance = .5
+var dash_distance = .2
 var dash_cooldown = 0.25
 var min_dash_speed = 0.001
 var dash_ready = true
@@ -73,6 +73,10 @@ func _ready():
 func _on_dash_timer_timeout():
 	#Re-enable dash
 	dash_ready = true
+
+func take_hit():
+	#We die or whatever
+	print("UR DED PAL")
 
 func _process(delta):
 	#Move according to our vector
