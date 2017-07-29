@@ -51,6 +51,13 @@ enum JOYSTICK_BUTTONS{
 	START=11,
 }
 
+enum KEYBOARD_KEYS{
+	W=87,
+	A=65,
+	S=83,
+	D=68
+}
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -136,7 +143,23 @@ func _input(event):
 		elif event.button_index in [JOYSTICK_BUTTONS.RIGHT_TRIGGER, JOYSTICK_BUTTONS.RIGHT_BUMPER]:
 			#We are attacking
 			print("Attacking!")
-			
+	
+	# Handle WASD movement for now
+	if event.type == InputEvent.KEY:
+		#Was it W A S D?
+		if event.scancode == KEYBOARD_KEYS.W:
+			move_angle = 1.5*PI
+			move_speed = speed if event.pressed else 0
+		elif event.scancode == KEYBOARD_KEYS.A:
+			move_angle = 1*PI
+			move_speed = speed if event.pressed else 0
+		elif event.scancode == KEYBOARD_KEYS.S:
+			move_angle = .5*PI
+			move_speed = speed if event.pressed else 0
+		elif event.scancode == KEYBOARD_KEYS.D:
+			move_angle = 2*PI
+			move_speed = speed if event.pressed else 0
+	
 	#Was it a start? Quit
 	if Input.is_joy_button_pressed(0, JOYSTICK_BUTTONS.START):
 		get_tree().quit()

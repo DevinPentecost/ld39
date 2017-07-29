@@ -22,7 +22,6 @@ func _process(delta):
 	var player_origin = player.get_transform().origin
 	var origin = get_transform().origin
 	var distance_squared = player_origin.distance_squared_to(origin)
-	print(distance_squared)
 	if distance_squared < range_squared:
 		#We can heal the player's power
 		player.current_power += power_recharge_rate*delta
