@@ -7,6 +7,7 @@ extends Position3D
 #Grab some nodes
 var player = null
 var sprite = null
+var area = null
 
 #Color variables
 var start_color = Color(0x838383ff)
@@ -26,7 +27,6 @@ var range_squared = 0.0025
 
 
 
-
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -34,6 +34,7 @@ func _ready():
 	
 	#Grab the player
 	player = get_node('../Player')
+	area = get_node('./Area')
 	
 	#Set the color of the sprite
 	sprite = get_node("./Sprite")
@@ -49,11 +50,10 @@ func _attack_complete_callback():
 	#print("Attack complete!")
 	
 	#Did we hit the player?
-	var player_origin = player.get_transform().origin
-	var origin = get_transform().origin
-	var distance_squared = player_origin.distance_squared_to(origin)
-	if distance_squared < range_squared:
-		#We can heal the player's power
+	var player_area = player.area
+	var overlap = area.get_overlapping_areas()
+	if area.overlaps_area(player_area):
+		#Player is hurt
 		player.take_hit()
 		
 	#We also fade away

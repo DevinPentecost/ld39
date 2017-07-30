@@ -4,6 +4,11 @@ extends Position3D
 # var a = 2
 # var b = "textvar"
 
+#Attack scene
+var player_attack_scene = preload("res://scenes/objects/PlayerAttack.tscn")
+
+#Get nodes
+var area = null
 
 var view_angle = 30
 
@@ -26,6 +31,9 @@ var power_drain_rate = 1
 var dash_power_drain = 10
 var attack_power_drain = 5
 var attack_power_gain = 15
+
+#Did you lose?
+var alive = true
 
 enum JOYSTICK_AXIS{
 	LEFT_STICK_VERTICAL=0,
@@ -61,6 +69,8 @@ enum KEYBOARD_KEYS{
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
+	area = get_node('./Area')
+	
 	set_process_input(true)
 	set_process(true)
 	
@@ -76,7 +86,14 @@ func _on_dash_timer_timeout():
 
 func take_hit():
 	#We die or whatever
+	alive = false
 	print("UR DED PAL")
+	
+func recover_power(amount=-1):
+	#Just add it
+	if amount < 0:
+		amount = attack_power_gain
+	current_power += amount
 
 func _process(delta):
 	#Move according to our vector
@@ -87,6 +104,10 @@ func _process(delta):
 	
 	#Drain power
 	current_power -= power_drain_rate*delta
+	
+	#Don't go over max power
+	if current_power < max_power:
+		current_power = max_power
 	
 func _input(event):
 	if event.type != InputEvent.MOUSE_MOTION:
@@ -147,6 +168,20 @@ func _input(event):
 		elif event.button_index in [JOYSTICK_BUTTONS.RIGHT_TRIGGER, JOYSTICK_BUTTONS.RIGHT_BUMPER]:
 			#We are attacking
 			print("Attacking!")
+			
+			#Make the attack
+			var new_player_attack = player_attack_scene.instance()
+			
+			#Move it to the player
+			var new_attack_transform = new_player_attack.get_transform()
+			new_attack_transform.origin = get_transform().origin
+			
+			#Rotate it to match the player
+			new_attack_transform = new_attack_transform.rotated(Vector3(0, 1, 0), view_angle)
+			new_player_attack.set_transform(new_attack_transform)
+			
+			#Add it
+			get_parent().add_child(new_player_attack)
 	
 	# Handle WASD movement for now
 	if event.type == InputEvent.KEY:
