@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://scripts/player_attack.gd" type="Script" id=1]
 [ext_resource path="res://sprites/circle.png" type="Texture" id=2]
-[ext_resource path="res://scripts/ui_enemy_power.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -72,14 +71,13 @@ pixel_size = 0.01
 axis = 1
 flags/transparent = true
 flags/shaded = false
-flags/alpha_cut = 1048576000
+flags/alpha_cut = 0
 texture = ExtResource( 2 )
 vframes = 1
 hframes = 1
 frame = 0
 region = false
 region_rect = Rect2( 0, 0, 0, 0 )
-script/script = ExtResource( 3 )
 
 [node name="Tween" type="Tween" parent="."]
 

@@ -9,9 +9,13 @@ var player_attack_scene = preload("res://scenes/objects/PlayerAttack.tscn")
 
 #Get nodes
 var area = null
+var camera = null
 
+#Aiming
 var view_angle = 30
+var mouse_aim_pos = null
 
+#Movement
 var move_angle = 0
 var move_speed = 0
 var speed = .005
@@ -84,9 +88,11 @@ func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	area = get_node('./Area')
+	camera = get_node('../Camera')
 	
 	set_process_input(true)
 	set_process(true)
+	set_fixed_process(true)
 	
 	#Create the dash timer
 	dash_timer = Timer.new()
@@ -191,84 +197,142 @@ func _process(delta):
 	if current_power > max_power:
 		current_power = max_power
 	
+	
+func _fixed_process(delta):
+	#Are we looking with the mouse?
+	if mouse_aim_pos != null:
+		var mouse_aim_source = camera.project_ray_origin(mouse_aim_pos)
+		var mouse_aim_target = mouse_aim_source + camera.project_ray_normal(mouse_aim_pos) * 1000
+		mouse_aim_target.z = mouse_aim_source.z
+		var space_state = get_world().get_direct_space_state()
+		var intersection = space_state.intersect_ray(mouse_aim_source, mouse_aim_target)
+		
+		#Did we click?
+		if not intersection.empty():
+			var click_location = intersection["position"]
+			print(click_location)
+			var my_pos = Vector2(get_transform().origin.x, get_transform().origin.z)
+			var target_pos = Vector2(click_location.x, click_location.z)
+			var angle = atan2(target_pos.x - my_pos.x, my_pos.y - target_pos.y)
+			print(angle)
+			view_angle = angle
+		
+		#Clear it so joypad can take over
+		mouse_aim_pos = null
+
 func _input(event):
 	if event.type != InputEvent.MOUSE_MOTION:
 		print(event)
 	
-	# Was this a look-joystick?
-	# TODO: Probably poll this per-frame instead of on event? Buttons can be on event...
-	if event.type == InputEvent.JOYSTICK_MOTION:
-		#Which trigger was it?
-		if event.axis in [JOYSTICK_AXIS.RIGHT_STICK_HORIZONTAL, JOYSTICK_AXIS.RIGHT_STICK_VERTICAL]:
-			print("Look changed!")
-			var x = Input.get_joy_axis(0, JOYSTICK_AXIS.RIGHT_STICK_HORIZONTAL)
-			var y = Input.get_joy_axis(0, JOYSTICK_AXIS.RIGHT_STICK_VERTICAL)
-			if !(x == 0 or y == 0):
-				view_angle = atan2(x, y)
-			
-		elif event.axis in [JOYSTICK_AXIS.LEFT_STICK_HORIZONTAL, JOYSTICK_AXIS.LEFT_STICK_VERTICAL]:
-			print("Moving!")
-			
-			#Figure out movement angle and direction
-			var x = Input.get_joy_axis(0, JOYSTICK_AXIS.LEFT_STICK_HORIZONTAL)
-			var y = Input.get_joy_axis(0, JOYSTICK_AXIS.LEFT_STICK_VERTICAL)
-			move_angle = atan2(x, y)
-			var move_velocity = sqrt(x*x + y*y)
-			
-			#Are we moving fast enough
-			if move_velocity > speed_threshold:
-				move_speed = move_velocity * speed
-			else:
-				move_speed = 0
-	
-	if event.type == InputEvent.JOYSTICK_BUTTON:
-		#Handle presses, not releases
-		if not event.pressed:
-			return
+	#What event did we get?
+	if event.is_action("player_aim"):
+		#We need to handle aiming
+		_handle_player_aim(event)
+	elif event.is_action("player_move"):
+		#Handle movement
+		_handle_player_move(event)
+	elif event.is_action("player_dash"):
+		#We dash
+		_handle_player_dash(event)
+	elif event.is_action("player_attack"):
+		#We're attacking
+		_handle_player_attack(event)
+	elif event.is_action("player_quit"):
+		#We quit
+		_handle_player_quit(event)
 		
-		#Which button was pressed?
-		if event.button_index in [JOYSTICK_BUTTONS.A]:
-			#We are dashing
-			print("Dashing!")
-			
-			#Can we dodge?
-			if(dash_ready and move_speed > min_dash_speed and current_power > 0):
-				#Put dash on cooldown
-				dash_ready = false
-				dash_timer.start()
-				
-				#And make the movement
-				#Move according to our vector
-				var movement = Vector3(dash_distance * cos(move_angle), 0, dash_distance * sin(move_angle))
-				var transform = get_transform()
-				transform = transform.translated(movement)
-				set_transform(transform)
-				
-				#Drain dash energy
-				current_power -= dash_power_drain
-			
-		elif event.button_index in [JOYSTICK_BUTTONS.RIGHT_TRIGGER, JOYSTICK_BUTTONS.RIGHT_BUMPER, JOYSTICK_BUTTONS.X]:
-			#We are attacking
-			print("Attacking!")
-			
-			self._make_attack()
+	#Track the mouse position
+	if event.type == InputEvent.MOUSE_MOTION:
+		mouse_aim_pos = event.pos 
+
+func _handle_player_aim(input_event):
+	print("Look changed!")
+	#What kind of aim was it?
+	if input_event.type == InputEvent.JOYSTICK_MOTION:
+		#We are aiming via analogue
+		var x = Input.get_joy_axis(0, JOYSTICK_AXIS.RIGHT_STICK_HORIZONTAL)
+		var y = Input.get_joy_axis(0, JOYSTICK_AXIS.RIGHT_STICK_VERTICAL)
+		if !(x == 0 or y == 0):
+			view_angle = atan2(x, y)
+	else:
+		#We have a mouse button or something
+		pass
+		#mouse_aim_source = camera.project_ray_origin(input_event.pos)
+		#mouse_aim_target = mouse_aim_source + camera.project_ray_normal(input_event.pos) * 1000
+		
+
+func _handle_player_move(input_event):
+	print("Moving!")
+	#Using the joystick to move?
+	if input_event.type == InputEvent.JOYSTICK_MOTION:
+		#We are moving via analogue
+		#Figure out movement angle and direction
+		var x = Input.get_joy_axis(0, JOYSTICK_AXIS.LEFT_STICK_HORIZONTAL)
+		var y = Input.get_joy_axis(0, JOYSTICK_AXIS.LEFT_STICK_VERTICAL)
+		move_angle = atan2(x, y)
+		var move_velocity = sqrt(x*x + y*y)
+		
+		#Are we moving fast enough
+		if move_velocity > speed_threshold:
+			move_speed = move_velocity * speed
+		else:
+			move_speed = 0
+	else:
+		#Moving via the keys when they are pressed
+		if input_event.is_pressed():
+			#Was it W A S D?
+			if input_event.scancode == KEYBOARD_KEYS.W:
+				move_angle = 1.5*PI
+				move_speed = speed if input_event.pressed else 0
+			elif input_event.scancode == KEYBOARD_KEYS.A:
+				move_angle = 1*PI
+				move_speed = speed if input_event.pressed else 0
+			elif input_event.scancode == KEYBOARD_KEYS.S:
+				move_angle = .5*PI
+				move_speed = speed if input_event.pressed else 0
+			elif input_event.scancode == KEYBOARD_KEYS.D:
+				move_angle = 2*PI
+				move_speed = speed if input_event.pressed else 0
+		else:
+			#Stop moving
+			move_angle = 0
+			move_speed = 0
+
+func _handle_player_dash(input_event):
+	#Make a dash motion?
+	if input_event.type == InputEvent.KEY and not input_event.is_pressed():
+		return
+		
+	#We are dashing
+	print("Dashing!")
 	
-	# Handle WASD movement for now
-	if event.type == InputEvent.KEY:
-		#Was it W A S D?
-		if event.scancode == KEYBOARD_KEYS.W:
-			move_angle = 1.5*PI
-			move_speed = speed if event.pressed else 0
-		elif event.scancode == KEYBOARD_KEYS.A:
-			move_angle = 1*PI
-			move_speed = speed if event.pressed else 0
-		elif event.scancode == KEYBOARD_KEYS.S:
-			move_angle = .5*PI
-			move_speed = speed if event.pressed else 0
-		elif event.scancode == KEYBOARD_KEYS.D:
-			move_angle = 2*PI
-			move_speed = speed if event.pressed else 0
+	#Can we dodge?
+	if(dash_ready and move_speed > min_dash_speed and current_power > 0):
+		#Put dash on cooldown
+		dash_ready = false
+		dash_timer.start()
+		
+		#And make the movement
+		#Move according to our vector
+		var movement = Vector3(dash_distance * cos(move_angle), 0, dash_distance * sin(move_angle))
+		var transform = get_transform()
+		transform = transform.translated(movement)
+		set_transform(transform)
+		
+		#Drain dash energy
+		current_power -= dash_power_drain
+
+func _handle_player_attack(input_event):
+	#Make an attack?
+	if input_event.type == InputEvent.KEY and not input_event.is_pressed():
+		return
 	
-	#Was it a start? Quit
-	if Input.is_joy_button_pressed(0, JOYSTICK_BUTTONS.START):
-		get_tree().quit()
+	#We are attacking
+	print("Attacking!")
+	_make_attack()
+	
+func _handle_player_quit(input_event):
+	print("Quitting")
+	get_tree().quit()
+	
+	
