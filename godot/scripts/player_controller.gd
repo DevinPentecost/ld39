@@ -13,6 +13,7 @@ var camera = null
 
 #Aiming
 var view_angle = 30
+var use_mouse_aim = false
 var mouse_aim_pos = null
 
 #Movement
@@ -200,7 +201,7 @@ func _process(delta):
 	
 func _fixed_process(delta):
 	#Are we looking with the mouse?
-	if mouse_aim_pos != null:
+	if mouse_aim_pos != null and use_mouse_aim:
 		var mouse_aim_source = camera.project_ray_origin(mouse_aim_pos)
 		var mouse_aim_target = mouse_aim_source + camera.project_ray_normal(mouse_aim_pos) * 1000
 		mouse_aim_target.z = mouse_aim_source.z
