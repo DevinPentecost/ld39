@@ -29,11 +29,13 @@ func _ready():
 	area = get_node('./Area')
 	
 	#Launch the attack
+	"""
 	tween.interpolate_callback(self, 1, "_attack_under_player", 0)
 	tween.interpolate_callback(self, 1.1, "_attack_under_player", 1)
 	tween.interpolate_callback(self, 1.2, "_attack_under_player", 2)
 	tween.set_repeat(true)
 	tween.start()
+	"""
 	
 func take_hit():
 	#We die or whatever
