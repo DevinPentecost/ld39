@@ -188,7 +188,7 @@ func _process(delta):
 	current_power -= power_drain_rate*delta
 	
 	#Don't go over max power
-	if current_power < max_power:
+	if current_power > max_power:
 		current_power = max_power
 	
 func _input(event):
