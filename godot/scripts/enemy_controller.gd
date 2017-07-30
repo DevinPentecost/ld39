@@ -11,6 +11,12 @@ var attack_scene = preload("res://scenes/objects/Attack.tscn")
 
 var player = null
 var tween = null
+var area = null
+
+# How much health does this have
+var current_power = 100
+var power_lost_on_hit = 5
+
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -20,6 +26,7 @@ func _ready():
 	#Grab the player
 	player = get_node('../Player')
 	tween = get_node('./Tween')
+	area = get_node('./Area')
 	
 	#Launch the attack
 	tween.interpolate_callback(self, 1, "_attack_under_player", 0)
@@ -27,8 +34,11 @@ func _ready():
 	tween.interpolate_callback(self, 1.2, "_attack_under_player", 2)
 	tween.set_repeat(true)
 	tween.start()
-	#_attack_under_player(0)
-	#_attack_under_player(3)
+	
+func take_hit():
+	#We die or whatever
+	current_power -= power_lost_on_hit
+	print("UR HURT BADGUY  ", current_power)
 	
 func _attack_under_player(radius=0):
 	#Make an attack under the player
@@ -49,7 +59,7 @@ func _attack_under_player(radius=0):
 	var angle_step = 360
 	if current_radius > 0:
 		var circumference = 2*PI*current_radius
-		var distance = 2*attack_radius
+		var distance = attack_radius
 		angle_step = 360*distance/circumference
 	
 	#How many attacks can be made at this radius?
@@ -71,5 +81,5 @@ func _attack_under_player(radius=0):
 		new_attack_transform.origin = player_origin + attack_offset
 		new_attack.set_transform(new_attack_transform)
 		
-		get_node("..").add_child(new_attack)
+		get_parent().add_child(new_attack)
 	#We've made the attack I think
