@@ -255,7 +255,7 @@ func _process(delta):
 	#Don't go over max power
 	if current_power > max_power:
 		current_power = max_power
-	
+		
 	if attack_current_combo > 0:
 		trail.show()
 	else: 

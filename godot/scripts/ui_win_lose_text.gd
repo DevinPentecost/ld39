@@ -34,4 +34,7 @@ func _process(delta):
 			cam.sizey -= 0.002
 	elif enemy.current_power <= 0:
 		win_image.show()
+		player.attack_current_combo = 0
+		if cam.sizey > 0.5:
+			cam.sizey -= 0.002
 
