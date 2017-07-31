@@ -129,6 +129,9 @@ func _ready():
 	timer_attack_combo_miss.set_one_shot(true)
 	add_child(timer_attack_combo_miss)
 	
+	#Hide the mouse
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
 func _on_dash_timer_timeout():
 	#Re-enable dash
 	print("Can dash")
