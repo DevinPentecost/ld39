@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://sfx/SketchyLogic-Venus.ogg" type="AudioStream" id=1]
+
+[node name="Node" type="Node"]
+
+[node name="Song" type="StreamPlayer" parent="."]
+
+stream/stream = ExtResource( 1 )
+stream/play = false
+stream/loop = true
+stream/volume_db = -12.0
+stream/autoplay = true
+stream/paused = false
+stream/loop_restart_time = 0.0
+stream/buffering_ms = 100
+
+
