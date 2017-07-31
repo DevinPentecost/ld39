@@ -214,7 +214,6 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51658, 0, 0 )
 
 [node name="Enemy" type="Position3D" parent="."]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.724243 )
 script/script = ExtResource( 8 )
@@ -228,7 +227,7 @@ playback/speed = 1.0
 
 [node name="boss" parent="Enemy" instance=ExtResource( 9 )]
 
-transform/local = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0 )
+transform/local = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 
 [node name="Area" type="Area" parent="Enemy"]
 
