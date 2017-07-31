@@ -15,8 +15,8 @@ var area = null
 var attack_timer = Timer.new()
 
 # How much health does this have
-var current_power = 100
-var power_lost_on_hit = 5
+var current_power = 40
+var power_lost_on_hit = 1
 
 # How long between attacks?
 # This is after the attack ends
