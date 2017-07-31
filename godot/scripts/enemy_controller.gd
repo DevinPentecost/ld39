@@ -18,7 +18,7 @@ var attack_timer = Timer.new()
 
 # How much health does this have
 var current_power = 100
-var power_lost_on_hit = 2.5
+var power_lost_on_hit = 5
 
 # How long between attacks?
 # This is after the attack ends
@@ -148,7 +148,12 @@ func _launch_player_circle_attack():
 	view_angle = atan2(player_origin.x - my_origin.x, my_origin.z - player_origin.z) + PI
 	
 	#Play the animation
-	_play_animation("ATK_Bomb", true, true)
+	randomize()
+	var rand_check = randi()%11+1
+	if rand_check > 3:
+		_play_animation("ATK_Bomb", true, true)
+	else:
+		_play_animation("ATK_Line", true, true)
 
 func _attack_under_player(radius):
 	#Make an attack under the player

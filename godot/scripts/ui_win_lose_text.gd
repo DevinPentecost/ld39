@@ -31,7 +31,7 @@ func _process(delta):
 	if not player.alive:
 		lose_image.show()
 		if cam.sizey > 0.5:
-			cam.sizey -= 0.005
+			cam.sizey -= 0.002
 	elif enemy.current_power <= 0:
 		win_image.show()
 

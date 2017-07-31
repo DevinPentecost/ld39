@@ -1,6 +1,6 @@
 extends Position3D
 
-# class member variables go here, for example:
+# class member variables go here, for example:aaaaaa
 # var a = 2
 # var b = "textvar"
 
@@ -24,6 +24,7 @@ var trail = null
 var view_angle = 30
 var use_mouse_aim = false
 var mouse_aim_pos = null
+var joys = null
 
 #Movement
 var move_angle = 0
@@ -42,7 +43,7 @@ var dash_timer = null
 var current_power = 100
 var max_power = 100
 var power_drain_rate = 1
-var dash_power_drain = 10
+var dash_power_drain = 15
 var attack_power_drain = 5
 var attack_power_gain = 15
 
@@ -92,7 +93,8 @@ enum KEYBOARD_KEYS{
 	W=87,
 	A=65,
 	S=83,
-	D=68
+	D=68,
+	
 }
 
 func _ready():
@@ -105,6 +107,9 @@ func _ready():
 	animation_player = get_node('./player/AnimationPlayer')
 	animation_player.connect("finished", self, "_animation_player_finished_callback")
 	trail = get_node('../Player/player/rig/Skeleton/Lhand/axe/trailanchor')	
+	
+	# are there joysticks?
+	joys = Input.get_connected_joysticks()
 	
 	set_process_input(true)
 	set_process(true)
@@ -133,6 +138,7 @@ func _ready():
 	
 	#Hide the mouse
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Input.set_mouse_mode(3)
 	
 func _on_dash_timer_timeout():
 	#Re-enable dash
@@ -284,6 +290,14 @@ func _animation_player_finished_callback():
 
 func _play_animation(animation_name, blocking=false, override=false):
 	
+	#aim player at mouse
+	if joys.size() == 0:
+		var x = get_viewport().get_mouse_pos().x
+		var y = get_viewport().get_mouse_pos().y
+		var w = get_viewport().get_rect().size.x
+		var h = get_viewport().get_rect().size.y
+		view_angle = atan2( 2*PI*(y-h/2)/h,2*PI*(x-w/2)/w)
+		
 	#Are we already playing the animation?
 	if (not animation_blocked or override) and (not animation_player.is_playing() or animation_player.get_current_animation() != animation_name):
 		#Play this animation
@@ -362,11 +376,11 @@ func _handle_player_move(input_event):
 			if input_event.scancode == KEYBOARD_KEYS.W:
 				move_angle = 1.5*PI
 				move_speed = speed if input_event.pressed else 0
-			elif input_event.scancode == KEYBOARD_KEYS.A:
-				move_angle = 1*PI
-				move_speed = speed if input_event.pressed else 0
 			elif input_event.scancode == KEYBOARD_KEYS.S:
 				move_angle = .5*PI
+				move_speed = speed if input_event.pressed else 0
+			if input_event.scancode == KEYBOARD_KEYS.A:
+				move_angle = 1*PI
 				move_speed = speed if input_event.pressed else 0
 			elif input_event.scancode == KEYBOARD_KEYS.D:
 				move_angle = 2*PI
@@ -440,8 +454,10 @@ func _handle_player_quit(input_event):
 	get_tree().quit()
 
 func _handle_player_restart(input_event):
-	print("Restarting breaks everything... ignoring")
-	#get_tree().call_deferred("change_scene", scene_path)
+	#this one works
+	#get_tree().reload_current_scene()
+	
+	get_tree().change_scene("res://scenes/test2/Start.tscn")
 	
 	
 	

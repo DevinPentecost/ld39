@@ -108,9 +108,9 @@ _update_shape_index = 0
 [node name="Camera" type="Camera" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 0.787678, 0.616087, 0, -0.616087, 0.787678, 0, 2, 2 )
+transform/local = Transform( 1, 0, 0, 0, 0.787678, 0.616087, 0, -0.616087, 0.787678, 0, 1.6, 2 )
 projection = 1
-size = 1.0
+size = 0.8
 near = 0.01
 far = 200.0
 keep_aspect = 1
@@ -232,7 +232,11 @@ script/script = ExtResource( 8 )
 
 [node name="PowerPad" parent="." instance=ExtResource( 9 )]
 
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51658, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0 )
+
+[node name="Area" parent="PowerPad"]
+
+editor/display_folded = true
 
 [node name="Enemy" parent="." instance=ExtResource( 10 )]
 
@@ -240,10 +244,7 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
 
-[node name="Skeleton" parent="Player/player/rig"]
-
-bones/26/bound_childs = [ NodePath("Lhand") ]
-bones/61/bound_childs = [ NodePath("back") ]
+editor/display_folded = true
 
 [node name="back" parent="Player/player/rig/Skeleton"]
 
@@ -277,16 +278,17 @@ script/script = ExtResource( 12 )
 
 [node name="Win Image" type="Sprite" parent="."]
 
-transform/pos = Vector2( 734.307, 151.585 )
+transform/pos = Vector2( 667.685, 242.265 )
 transform/scale = Vector2( 8, 8 )
 texture = ExtResource( 13 )
 
 [node name="Lose Image" type="Sprite" parent="."]
 
-transform/pos = Vector2( 740.336, 151.585 )
+transform/pos = Vector2( 670.013, 240.415 )
 transform/scale = Vector2( 8, 8 )
 texture = ExtResource( 14 )
 
 
+[editable path="PowerPad"]
 [editable path="Player"]
 [editable path="Player/player"]
