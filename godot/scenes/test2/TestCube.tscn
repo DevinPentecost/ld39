@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=2]
@@ -7,10 +7,9 @@
 [ext_resource path="res://sprites/square.png" type="Texture" id=5]
 [ext_resource path="res://scripts/ui_enemy_power.gd" type="Script" id=6]
 [ext_resource path="res://scenes/objects/PowerPad.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scripts/enemy_controller.gd" type="Script" id=8]
-[ext_resource path="res://models/boss.scn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scripts/ui_win_lose_text.gd" type="Script" id=11]
+[ext_resource path="res://scenes/objects/Enemy.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scripts/ui_win_lose_text.gd" type="Script" id=10]
 
 [sub_resource type="FixedMaterial" id=1]
 
@@ -53,11 +52,6 @@ textures/shade_param_tc = 0
 [sub_resource type="PlaneShape" id=2]
 
 plane = Plane( 0, 1, 0, 0 )
-
-[sub_resource type="CapsuleShape" id=3]
-
-radius = 0.0576637
-height = 0.0370489
 
 [node name="BaseNode" type="Node"]
 
@@ -212,54 +206,11 @@ script/script = ExtResource( 6 )
 
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51658, 0, 0 )
 
-[node name="Enemy" type="Position3D" parent="."]
+[node name="Enemy" parent="." instance=ExtResource( 8 )]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.724243 )
-script/script = ExtResource( 8 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 
-[node name="Tween" type="Tween" parent="Enemy"]
-
-playback/process_mode = 1
-playback/active = false
-playback/repeat = false
-playback/speed = 1.0
-
-[node name="boss" parent="Enemy" instance=ExtResource( 9 )]
-
-transform/local = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
-
-[node name="Area" type="Area" parent="Enemy"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-input/ray_pickable = false
-input/capture_on_drag = false
-shape_count = 1
-shapes/0/shape = SubResource( 3 )
-shapes/0/transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.036377, 0 )
-shapes/0/trigger = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 0.0
-monitoring = true
-monitorable = true
-collision/layers = 1
-collision/mask = 1
-
-[node name="CollisionShape" type="CollisionShape" parent="Enemy/Area"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.036377, 0 )
-shape = SubResource( 3 )
-trigger = false
-_update_shape_index = 0
-
-[node name="Player" parent="." instance=ExtResource( 10 )]
+[node name="Player" parent="." instance=ExtResource( 9 )]
 
 [node name="WinLoseText" type="RichTextLabel" parent="."]
 
@@ -268,14 +219,14 @@ focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 324.0
-margin/top = 216.0
-margin/right = 400.0
-margin/bottom = 261.0
+margin/left = 315.0
+margin/top = 442.0
+margin/right = 391.0
+margin/bottom = 487.0
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode/enabled = false
 bbcode/bbcode = "TEST"
 visible_characters = 10
-script/script = ExtResource( 11 )
+script/script = ExtResource( 10 )
 
 
