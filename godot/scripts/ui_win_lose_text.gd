@@ -6,20 +6,32 @@ extends RichTextLabel
 
 var player = null
 var enemy = null
+var cam = null
+
+var win_image = null
+var lose_image = null
 
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	player = get_node("../Player")
 	enemy = get_node("../Enemy")
+	cam = get_node("../Camera")
+	
+	win_image = get_node("../Win Image")
+	lose_image = get_node("../Lose Image")
+	win_image.hide()
+	lose_image.hide()
+	
 	set_process(true)
 	
 func _process(delta):
 	#Is someone dead?
 	var text = ''
 	if not player.alive:
-		text = 'YOU LOSE'
+		lose_image.show()
+		if cam.sizey > 0.5:
+			cam.sizey -= 0.005
 	elif enemy.current_power <= 0:
-		text = 'YOU WIN!'
-	
-	set_bbcode(text)
+		win_image.show()
+

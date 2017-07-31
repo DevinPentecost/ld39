@@ -1,4 +1,5 @@
 #https://github.com/LeonardMeagher2/Godot-Assets/blob/master/Plugins/Trails/3DTrail.gd
+
 extends Spatial
 
 export(Material) var material
@@ -72,6 +73,7 @@ func _ready():
 	instance.set_name("TrailMeshInstance")
 	instance.set_material_override(material)
 	optCount = optimizeCount
+	
 
 func _process(delta):
 	update(delta)
@@ -93,6 +95,7 @@ func segPos(s,width):
 	return Vector3(x,y,0)
 
 func update(delta):
+	
 	instance.set_global_transform(Transform())
 	#emit
 	if(!emit):

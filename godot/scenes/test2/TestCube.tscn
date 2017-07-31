@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=1]
+[gd_scene load_steps=17 format=1]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://scenes/objects/Enemy.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=11]
 [ext_resource path="res://scripts/ui_win_lose_text.gd" type="Script" id=12]
+[ext_resource path="res://sprites/win.png" type="Texture" id=13]
+[ext_resource path="res://sprites/lose.png" type="Texture" id=14]
 
 [sub_resource type="FixedMaterial" id=1]
 
@@ -238,8 +240,26 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
 
+[node name="Skeleton" parent="Player/player/rig"]
+
+bones/26/bound_childs = [ NodePath("Lhand") ]
+bones/61/bound_childs = [ NodePath("back") ]
+
+[node name="back" parent="Player/player/rig/Skeleton"]
+
+transform/local = Transform( 1, 2.38419e-07, 0, -4.20301e-08, 0.176287, -0.984339, -2.34685e-07, 0.984339, 0.176287, 3.55271e-15, 1.29609, -0.0742292 )
+
+[node name="Lhand" parent="Player/player/rig/Skeleton"]
+
+transform/local = Transform( 0.060057, -0.935719, -0.347596, -0.122145, -0.352497, 0.927807, -0.990693, -0.0132642, -0.135463, 0.673694, 0.848741, -0.103589 )
+
+[node name="trailanchor" parent="Player/player/rig/Skeleton/Lhand/axe"]
+
+lifeTime = 0.4
+
 [node name="WinLoseText" type="RichTextLabel" parent="."]
 
+visibility/visible = false
 rect/scale = Vector2( 2, 2 )
 focus/ignore_mouse = true
 focus/stop_mouse = false
@@ -255,4 +275,18 @@ bbcode/bbcode = "TEST"
 visible_characters = 10
 script/script = ExtResource( 12 )
 
+[node name="Win Image" type="Sprite" parent="."]
 
+transform/pos = Vector2( 734.307, 151.585 )
+transform/scale = Vector2( 8, 8 )
+texture = ExtResource( 13 )
+
+[node name="Lose Image" type="Sprite" parent="."]
+
+transform/pos = Vector2( 740.336, 151.585 )
+transform/scale = Vector2( 8, 8 )
+texture = ExtResource( 14 )
+
+
+[editable path="Player"]
+[editable path="Player/player"]

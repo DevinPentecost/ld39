@@ -18,6 +18,7 @@ var camera = null
 var sample_player = null
 var animation_player = null
 var animation_blocked = false
+var trail = null
 
 #Aiming
 var view_angle = 30
@@ -103,6 +104,7 @@ func _ready():
 	sample_player = get_node("./SamplePlayer")
 	animation_player = get_node('./player/AnimationPlayer')
 	animation_player.connect("finished", self, "_animation_player_finished_callback")
+	trail = get_node('../Player/player/rig/Skeleton/Lhand/axe/trailanchor')	
 	
 	set_process_input(true)
 	set_process(true)
@@ -247,6 +249,11 @@ func _process(delta):
 	#Don't go over max power
 	if current_power > max_power:
 		current_power = max_power
+	
+	if attack_current_combo > 0:
+		trail.show()
+	else: 
+		trail.hide()
 	
 	
 func _fixed_process(delta):
