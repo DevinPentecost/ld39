@@ -154,7 +154,7 @@ shadow/zoffset_scale = 2.0
 
 [node name="Player Power Bar BG" type="Sprite" parent="."]
 
-transform/pos = Vector2( 160, 40 )
+transform/pos = Vector2( 140, 40 )
 transform/scale = Vector2( 2, 2 )
 texture = ExtResource( 3 )
 
@@ -183,9 +183,9 @@ focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 121.0
+margin/left = 101.0
 margin/top = 31.0
-margin/right = 185.0
+margin/right = 165.0
 margin/bottom = 47.0
 range/min = 0.0
 range/max = 100.0
