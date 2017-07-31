@@ -1,15 +1,17 @@
-[gd_scene load_steps=13 format=1]
+[gd_scene load_steps=15 format=1]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=2]
-[ext_resource path="res://sprites/arrow.png" type="Texture" id=3]
-[ext_resource path="res://scripts/ui_player_power.gd" type="Script" id=4]
-[ext_resource path="res://sprites/square.png" type="Texture" id=5]
-[ext_resource path="res://scripts/ui_enemy_power.gd" type="Script" id=6]
-[ext_resource path="res://scenes/objects/PowerPad.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scenes/objects/Enemy.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scripts/ui_win_lose_text.gd" type="Script" id=10]
+[ext_resource path="res://sprites/bar1.png" type="Texture" id=3]
+[ext_resource path="res://sprites/bar3.png" type="Texture" id=4]
+[ext_resource path="res://sprites/bar2.png" type="Texture" id=5]
+[ext_resource path="res://scripts/ui_player_power.gd" type="Script" id=6]
+[ext_resource path="res://sprites/bar4.png" type="Texture" id=7]
+[ext_resource path="res://scripts/ui_enemy_power.gd" type="Script" id=8]
+[ext_resource path="res://scenes/objects/PowerPad.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/objects/Enemy.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/objects/Player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/ui_win_lose_text.gd" type="Script" id=12]
 
 [sub_resource type="FixedMaterial" id=1]
 
@@ -150,17 +152,41 @@ shadow/max_distance = 0.0
 shadow/split_weight = 0.5
 shadow/zoffset_scale = 2.0
 
+[node name="Player Power Bar BG" type="Sprite" parent="."]
+
+transform/pos = Vector2( 160, 40 )
+transform/scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="RightSideAnchor" type="Control" parent="."]
+
+anchor/left = 1
+anchor/right = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 160.0
+margin/top = 40.0
+margin/right = 120.0
+margin/bottom = 80.0
+
+[node name="Enemy  Power Bar BG" type="Sprite" parent="RightSideAnchor"]
+
+transform/scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+
 [node name="Player Power Bar" type="TextureProgress" parent="."]
 
-rect/scale = Vector2( 1, 0.5 )
+rect/scale = Vector2( 1.72, 1.1 )
 focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 200.0
-margin/bottom = 200.0
+margin/left = 121.0
+margin/top = 31.0
+margin/right = 185.0
+margin/bottom = 47.0
 range/min = 0.0
 range/max = 100.0
 range/step = 1.0
@@ -170,24 +196,24 @@ range/exp_edit = false
 range/rounded = true
 texture/under = null
 texture/over = null
-texture/progress = ExtResource( 3 )
+texture/progress = ExtResource( 5 )
 radial_fill/fill_degrees = 360.0
 radial_fill/center_offset = Vector2( 0, 0 )
-script/script = ExtResource( 4 )
+script/script = ExtResource( 6 )
 
 [node name="Enemy Power Bar" type="TextureProgress" parent="."]
 
 anchor/left = 1
 anchor/right = 1
-rect/scale = Vector2( 1, 0.5 )
+rect/scale = Vector2( 1.72, 1.1 )
 focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 200.0
-margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 200.0
+margin/left = 199.0
+margin/top = 31.0
+margin/right = 135.0
+margin/bottom = 47.0
 range/min = 0.0
 range/max = 100.0
 range/step = 1.0
@@ -195,22 +221,22 @@ range/page = 0.0
 range/value = 50.0
 range/exp_edit = false
 range/rounded = true
-texture/under = ExtResource( 1 )
+texture/under = null
 texture/over = null
-texture/progress = ExtResource( 5 )
+texture/progress = ExtResource( 7 )
 radial_fill/fill_degrees = 360.0
 radial_fill/center_offset = Vector2( 0, 0 )
-script/script = ExtResource( 6 )
+script/script = ExtResource( 8 )
 
-[node name="PowerPad" parent="." instance=ExtResource( 7 )]
+[node name="PowerPad" parent="." instance=ExtResource( 9 )]
 
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51658, 0, 0 )
 
-[node name="Enemy" parent="." instance=ExtResource( 8 )]
+[node name="Enemy" parent="." instance=ExtResource( 10 )]
 
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 
-[node name="Player" parent="." instance=ExtResource( 9 )]
+[node name="Player" parent="." instance=ExtResource( 11 )]
 
 [node name="WinLoseText" type="RichTextLabel" parent="."]
 
@@ -227,6 +253,6 @@ custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode/enabled = false
 bbcode/bbcode = "TEST"
 visible_characters = 10
-script/script = ExtResource( 10 )
+script/script = ExtResource( 12 )
 
 
