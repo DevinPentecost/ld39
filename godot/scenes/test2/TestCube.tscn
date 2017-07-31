@@ -214,6 +214,7 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51658, 0, 0 )
 
 [node name="Enemy" type="Position3D" parent="."]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.724243 )
 script/script = ExtResource( 8 )

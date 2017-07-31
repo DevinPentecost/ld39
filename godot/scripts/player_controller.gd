@@ -6,10 +6,13 @@ extends Position3D
 
 #Attack scene
 var player_attack_scene = preload("res://scenes/objects/PlayerAttack.tscn")
+var player_dash_scene = preload("res://scenes/objects/PlayerDashGhost.tscn")
 
 #Get nodes
 var area = null
 var camera = null
+var animation_player = null
+var animation_blocked = false
 
 #Aiming
 var view_angle = 30
@@ -90,6 +93,8 @@ func _ready():
 	# Initialization here
 	area = get_node('./Area')
 	camera = get_node('../Camera')
+	animation_player = get_node('./player/AnimationPlayer')
+	animation_player.connect("finished", self, "_animation_player_finished_callback")
 	
 	set_process_input(true)
 	set_process(true)
@@ -183,9 +188,21 @@ func _make_attack():
 	timer_attack_combo_miss.stop()
 	timer_attack_combo_miss.start()
 	
+	#Play the animation
+	var animation_name = 'atk'+str(attack_current_combo)
+	_play_animation(animation_name, true, true)
+	
 
 func _process(delta):
 	#Move according to our vector
+	#Are we moving?
+	if move_speed > 0:
+		#Play the move animation if we aren't already
+		_play_animation("walk")
+	else:
+		_play_animation("idle")
+		
+		
 	var movement = Vector3(move_speed * cos(move_angle), 0, move_speed * sin(move_angle))
 	var transform = get_transform()
 	transform = transform.translated(movement)
@@ -220,6 +237,23 @@ func _fixed_process(delta):
 		
 		#Clear it so joypad can take over
 		mouse_aim_pos = null
+
+func _animation_player_finished_callback():
+	#We are no longer blocked
+	animation_blocked = false
+
+func _play_animation(animation_name, blocking=false, override=false):
+	
+	#Are we already playing the animation?
+	if (not animation_blocked or override) and (not animation_player.is_playing() or animation_player.get_current_animation() != animation_name):
+		#Play this animation
+		animation_player.play(animation_name)
+
+	#Are we playing a blocking animation?
+	if blocking:
+		#We need to add a block
+		animation_blocked = true
+	
 
 func _input(event):
 	if event.type != InputEvent.MOUSE_MOTION:
@@ -316,12 +350,33 @@ func _handle_player_dash(input_event):
 		#And make the movement
 		#Move according to our vector
 		var movement = Vector3(dash_distance * cos(move_angle), 0, dash_distance * sin(move_angle))
-		var transform = get_transform()
-		transform = transform.translated(movement)
-		set_transform(transform)
+		var current_position = get_transform()
+		var final_position = current_position.translated(movement)
+		set_transform(final_position)
 		
 		#Drain dash energy
 		current_power -= dash_power_drain
+		
+		#Spawn a few ghosts
+		var dash_distance = current_position.origin.distance_to(final_position.origin)
+		var ghost_count = 3
+		for ghost in range(ghost_count):
+			#Where to put the ghost?
+			var dash_percentage = float(ghost) / ghost_count
+			var ghost_position = current_position.origin.linear_interpolate(final_position.origin, dash_percentage)
+			
+			#Move the ghost
+			var new_ghost = player_dash_scene.instance()
+			var final_transform = current_position
+			final_transform.origin = ghost_position
+			final_transform = final_transform.rotated(Vector3(0, 1, 0), view_angle)
+			new_ghost.set_transform(final_transform)
+			
+			#Set the index and add
+			#Set up the ghost's animation and lifetime
+			new_ghost.init(ghost, dash_percentage)
+			get_parent().add_child(new_ghost)
+			
 
 func _handle_player_attack(input_event):
 	#Make an attack?
