@@ -40,8 +40,10 @@ func _process(delta):
 		enemy.take_hit()
 		player.recover_power()
 		
-	#Don't check the attack again
-	attack_done = true
+		#Don't check the attack again
+		attack_done = true
+		
+	
 	
 	#Change the color
 	var current_color = color.linear_interpolate(faded_color, fade_percent)
