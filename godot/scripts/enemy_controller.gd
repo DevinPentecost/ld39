@@ -12,17 +12,22 @@ var attack_scene = preload("res://scenes/objects/Attack.tscn")
 var player = null
 var tween = null
 var area = null
+var animation_player = null
+var sample_player = null
 var attack_timer = Timer.new()
 
 # How much health does this have
-var current_power = 40
-var power_lost_on_hit = 1
+var current_power = 100
+var power_lost_on_hit = 2.5
 
 # How long between attacks?
 # This is after the attack ends
 var attack_min_cooldown = 0.75
 var attack_max_cooldown = 1.75
 
+#Animation stuff
+var animation_blocked = false
+var animation_stopped = false
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -32,6 +37,11 @@ func _ready():
 	#Grab the player
 	player = get_node('../Player')
 	area = get_node('./Area')
+	sample_player = get_node("./SamplePlayer")
+	
+	#Set up the animation player
+	animation_player = get_node('./boss/AnimationPlayer')
+	animation_player.connect("finished", self, "_animation_player_finished_callback")
 	
 	#Set up the timer
 	attack_timer.connect("timeout", self, "_on_attack_timer_timeout")
@@ -56,7 +66,14 @@ func _attack_finished():
 	attack_timer.start()
 	
 func _on_attack_timer_timeout():
+	if player.all_done:
+		return
+		
 	#It's time to launch an attack
+	#Play an attack sound
+	var attack_sound_index = randi()%3 + 1
+	var attack_sound = "enemy_attack_" + str(attack_sound_index)
+	sample_player.play(attack_sound)
 	
 	#TODO: Pick an attack some how
 	var possible_attacks = 2
@@ -66,6 +83,17 @@ func _on_attack_timer_timeout():
 	elif attack == 1:
 		_launch_semi_circle_attack()
 	
+
+func _process(delta):
+	#Did we died?
+	if current_power <= 0 and not animation_stopped:
+		_play_animation("Death", true, true)
+		animation_stopped = true
+		return
+	
+	#Play the idle animation for now
+	if not animation_stopped:
+		_play_animation("Idle")
 
 func _launch_semi_circle_attack(quadrant=null):
 	#Was a quadrant specified?
@@ -84,6 +112,9 @@ func _launch_semi_circle_attack(quadrant=null):
 	tween.interpolate_callback(self, 1.25, "_launch_semi_cirle_attack", target_position, 5, start_angle, end_angle)
 	tween.interpolate_callback(self, 1.5, "_attack_finished")
 	tween.start()
+	
+	#Play the animation
+	_play_animation("ATK_Sweep", true, true)
 
 func _launch_player_circle_attack():
 	#Fire off the attack
@@ -93,6 +124,9 @@ func _launch_player_circle_attack():
 	tween.interpolate_callback(self, .5, "_launch_circle_attack", player_origin, 2)
 	tween.interpolate_callback(self, 1, "_attack_finished")
 	tween.start()
+	
+	#Play the animation
+	_play_animation("ATK_Bomb", true, true)
 
 func _attack_under_player(radius):
 	#Make an attack under the player
@@ -148,3 +182,20 @@ func _launch_semi_cirle_attack(target_position, radius, start_angle, end_angle):
 		
 		get_parent().add_child(new_attack)
 	#We've made the attack I think
+
+
+func _animation_player_finished_callback():
+	#We are no longer blocked
+	animation_blocked = false
+	
+func _play_animation(animation_name, blocking=false, override=false):
+		
+	#Are we already playing the animation?
+	if (not animation_blocked or override) and (not animation_player.is_playing() or animation_player.get_current_animation() != animation_name):
+		#Play this animation
+		animation_player.play(animation_name)
+
+	#Are we playing a blocking animation?
+	if blocking:
+		#We need to add a block
+		animation_blocked = true

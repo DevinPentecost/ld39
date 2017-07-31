@@ -8,6 +8,7 @@ extends Position3D
 var player = null
 var sprite = null
 var area = null
+var sample_player = null
 
 #Color variables
 var start_color = Color(0x838383ff)
@@ -35,6 +36,7 @@ func _ready():
 	#Grab the player
 	player = get_node('../Player')
 	area = get_node('./Area')
+	sample_player = get_node("./SamplePlayer")
 	
 	#Set the color of the sprite
 	sprite = get_node("./Sprite")
@@ -45,6 +47,9 @@ func _ready():
 	attack_tween.interpolate_property(self, "color_percent", 0, 1, attack_time, Tween.TRANS_EXPO, Tween.EASE_IN)
 	attack_tween.interpolate_callback(self, attack_time, "_attack_complete_callback")
 	attack_tween.start()
+	
+	#Play sound
+	sample_player.play("attack_hum", true)
 	
 func _attack_complete_callback():
 	#print("Attack complete!")
@@ -62,6 +67,9 @@ func _attack_complete_callback():
 	attack_tween.interpolate_property(self, "color_percent", 0, 1, fade_time, Tween.TRANS_EXPO, Tween.EASE_OUT_IN)
 	attack_tween.interpolate_callback(self, fade_time, "_fade_complete_callback")
 	attack_tween.start()
+	
+	#Play boom
+	sample_player.play("attack_explode", true)
 	
 func _fade_complete_callback():
 	#We go away

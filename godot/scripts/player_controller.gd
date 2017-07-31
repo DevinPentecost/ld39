@@ -5,12 +5,17 @@ extends Position3D
 # var b = "textvar"
 
 #Attack scene
+var scene_path = "res://scenes/test2/TestCube.tscn"
 var player_attack_scene = preload("res://scenes/objects/PlayerAttack.tscn")
 var player_dash_scene = preload("res://scenes/objects/PlayerDashGhost.tscn")
+
+#Our enemy
+var enemy = null
 
 #Get nodes
 var area = null
 var camera = null
+var sample_player = null
 var animation_player = null
 var animation_blocked = false
 
@@ -56,6 +61,7 @@ var timer_attack_combo_miss = Timer.new()
 
 #Did you lose?
 var alive = true
+var all_done = false
 
 enum JOYSTICK_AXIS{
 	LEFT_STICK_VERTICAL=0,
@@ -91,8 +97,10 @@ enum KEYBOARD_KEYS{
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
+	enemy = get_node("../Enemy")
 	area = get_node('./Area')
 	camera = get_node('../Camera')
+	sample_player = get_node("./SamplePlayer")
 	animation_player = get_node('./player/AnimationPlayer')
 	animation_player.connect("finished", self, "_animation_player_finished_callback")
 	
@@ -149,8 +157,13 @@ func _on_attack_combo_miss_timer_timeout():
 
 func take_hit():
 	#We die or whatever
+	if all_done:
+		return
+		
 	alive = false
 	print("UR DED PAL")
+	sample_player.play("player_dead")
+	
 	
 func recover_power(amount=-1):
 	#Just add it
@@ -194,6 +207,23 @@ func _make_attack():
 	
 
 func _process(delta):
+	#Is our enemy dead?
+	if enemy.current_power <= 0:
+		_play_animation("victory", true, true)
+		all_done = true
+		return
+	
+	if all_done:
+		return
+	
+	
+		
+	#Are we dead?
+	if not alive:
+		_play_animation("death", true, true)
+		all_done = true
+		return
+	
 	#Move according to our vector
 	#Are we moving?
 	if move_speed > 0:
@@ -202,7 +232,7 @@ func _process(delta):
 	else:
 		_play_animation("idle")
 		
-		
+	#Move the object
 	var movement = Vector3(move_speed * cos(move_angle), 0, move_speed * sin(move_angle))
 	var transform = get_transform()
 	transform = transform.translated(movement)
@@ -275,7 +305,10 @@ func _input(event):
 	elif event.is_action("player_quit"):
 		#We quit
 		_handle_player_quit(event)
-		
+	elif event.is_action("player_restart"):
+		#We quit
+		_handle_player_restart(event)
+	
 	#Track the mouse position
 	if event.type == InputEvent.MOUSE_MOTION:
 		mouse_aim_pos = event.pos 
@@ -335,7 +368,7 @@ func _handle_player_move(input_event):
 
 func _handle_player_dash(input_event):
 	#Make a dash motion?
-	if input_event.type == InputEvent.KEY and not input_event.is_pressed():
+	if input_event.type == InputEvent.KEY and not input_event.is_pressed() or all_done:
 		return
 		
 	#We are dashing
@@ -356,6 +389,11 @@ func _handle_player_dash(input_event):
 		
 		#Drain dash energy
 		current_power -= dash_power_drain
+		
+		#Play the dash sound
+		var dash_index = randi()%2 + 1
+		var dash_sound = "dash_" + str(dash_index)
+		sample_player.play(dash_sound)
 		
 		#Spawn a few ghosts
 		var dash_distance = current_position.origin.distance_to(final_position.origin)
@@ -380,7 +418,7 @@ func _handle_player_dash(input_event):
 
 func _handle_player_attack(input_event):
 	#Make an attack?
-	if input_event.type == InputEvent.KEY and not input_event.is_pressed():
+	if input_event.type == InputEvent.KEY and not input_event.is_pressed() or all_done:
 		return
 	
 	#We are attacking
@@ -390,5 +428,8 @@ func _handle_player_attack(input_event):
 func _handle_player_quit(input_event):
 	print("Quitting")
 	get_tree().quit()
-	
+
+func _handle_player_restart(input_event):
+	print("Restarting")
+	get_tree().change_scene(scene_path)
 	

@@ -1,0 +1,118 @@
+[gd_resource type="SampleLibrary" load_steps=17 format=1]
+
+[ext_resource path="res://sfx/attack_explode.smp" type="Sample" id=1]
+[ext_resource path="res://sfx/attack_hum.smp" type="Sample" id=2]
+[ext_resource path="res://sfx/dash_1.smp" type="Sample" id=3]
+[ext_resource path="res://sfx/dash_2.smp" type="Sample" id=4]
+[ext_resource path="res://sfx/dash_maybe.smp" type="Sample" id=5]
+[ext_resource path="res://sfx/enemy_attack_1.smp" type="Sample" id=6]
+[ext_resource path="res://sfx/enemy_attack_2.smp" type="Sample" id=7]
+[ext_resource path="res://sfx/enemy_attack_3.smp" type="Sample" id=8]
+[ext_resource path="res://sfx/enemy_dead.smp" type="Sample" id=9]
+[ext_resource path="res://sfx/enemy_maybe.smp" type="Sample" id=10]
+[ext_resource path="res://sfx/hit.smp" type="Sample" id=11]
+[ext_resource path="res://sfx/player_attack_1.smp" type="Sample" id=12]
+[ext_resource path="res://sfx/player_attack_2.smp" type="Sample" id=13]
+[ext_resource path="res://sfx/player_attack_3.smp" type="Sample" id=14]
+[ext_resource path="res://sfx/player_dead.smp" type="Sample" id=15]
+[ext_resource path="res://sfx/swoosh.smp" type="Sample" id=16]
+
+[resource]
+
+samples/attack_explode = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 1 )
+}
+samples/attack_hum = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 2 )
+}
+samples/dash_1 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 3 )
+}
+samples/dash_2 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 4 )
+}
+samples/dash_maybe = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 5 )
+}
+samples/enemy_attack_1 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 6 )
+}
+samples/enemy_attack_2 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 7 )
+}
+samples/enemy_attack_3 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 8 )
+}
+samples/enemy_dead = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 9 )
+}
+samples/enemy_maybe = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 10 )
+}
+samples/hit = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 11 )
+}
+samples/player_attack_1 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 12 )
+}
+samples/player_attack_2 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 13 )
+}
+samples/player_attack_3 = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 14 )
+}
+samples/player_dead = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 15 )
+}
+samples/swoosh = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 16 )
+}
+

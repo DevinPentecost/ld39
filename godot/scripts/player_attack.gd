@@ -9,6 +9,7 @@ var player = null
 var area = null
 var sprite = null
 var tween = null
+var sample_player = null
 
 var color = Color(0x00927d)
 var faded_color = Color(0xFFFFFF00)
@@ -24,6 +25,7 @@ func _ready():
 	area = get_node('./Area')
 	sprite = get_node('./Sprite')
 	tween = get_node('./Tween')
+	sample_player = get_node("SamplePlayer")
 	
 	set_process(true)
 	
@@ -32,6 +34,12 @@ func _ready():
 	tween.interpolate_callback(self, fade_time, "_fade_complete_callback")
 	tween.start()
 	
+	#Play a sound
+	var sound_index = randi() % 3 + 1
+	var sound_name = "player_attack_" + str(sound_index)
+	sample_player.play(sound_name)
+	sample_player.play("swoosh")
+	
 	
 func _process(delta):
 	#Did it hit the boss?
@@ -39,12 +47,11 @@ func _process(delta):
 		#We hit the enemy
 		enemy.take_hit()
 		player.recover_power()
+		sample_player.play("hit")
 		
 		#Don't check the attack again
 		attack_done = true
 		
-	
-	
 	#Change the color
 	var current_color = color.linear_interpolate(faded_color, fade_percent)
 	var sprite_color = sprite.set_modulate(current_color)
