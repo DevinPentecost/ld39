@@ -24,10 +24,14 @@ var power_lost_on_hit = 2.5
 # This is after the attack ends
 var attack_min_cooldown = 0.75
 var attack_max_cooldown = 1.75
+var attack_max_range_squared = 0.5
 
 #Animation stuff
 var animation_blocked = false
 var animation_stopped = false
+
+#Which way are we viewing?
+var view_angle = 0
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -68,12 +72,21 @@ func _attack_finished():
 func _on_attack_timer_timeout():
 	if player.all_done:
 		return
-		
+	
+	#Is the player too far away?
+	var player_distance_squared = get_transform().origin.distance_squared_to(player.get_transform().origin)
+	if  player_distance_squared > attack_max_range_squared:
+		#Wait a bit
+		tween.interpolate_callback(self, 0.25, "_attack_finished")
+		tween.start()
+		return
+	
 	#It's time to launch an attack
 	#Play an attack sound
 	var attack_sound_index = randi()%3 + 1
 	var attack_sound = "enemy_attack_" + str(attack_sound_index)
 	sample_player.play(attack_sound)
+	
 	
 	#TODO: Pick an attack some how
 	var possible_attacks = 2
@@ -103,6 +116,7 @@ func _launch_semi_circle_attack(quadrant=null):
 	#Launch a bunch of radii in a half circle
 	var start_angle = 0 + 90 * quadrant
 	var end_angle = 210 + 90 * quadrant
+	
 	var target_position = get_transform().origin
 	tween.interpolate_callback(self, 0, "_launch_semi_cirle_attack", target_position, 0, start_angle, end_angle)
 	tween.interpolate_callback(self, .25, "_launch_semi_cirle_attack", target_position, 1, start_angle, end_angle)
@@ -112,6 +126,9 @@ func _launch_semi_circle_attack(quadrant=null):
 	tween.interpolate_callback(self, 1.25, "_launch_semi_cirle_attack", target_position, 5, start_angle, end_angle)
 	tween.interpolate_callback(self, 1.5, "_attack_finished")
 	tween.start()
+	
+	#Point towards the attack
+	view_angle = (start_angle + end_angle) / 2
 	
 	#Play the animation
 	_play_animation("ATK_Sweep", true, true)
@@ -124,6 +141,11 @@ func _launch_player_circle_attack():
 	tween.interpolate_callback(self, .5, "_launch_circle_attack", player_origin, 2)
 	tween.interpolate_callback(self, 1, "_attack_finished")
 	tween.start()
+	
+	#Point towards the player
+	var player_origin = player.get_transform().origin
+	var my_origin = get_transform().origin
+	view_angle = atan2(player_origin.x - my_origin.x, my_origin.z - player_origin.z) + PI
 	
 	#Play the animation
 	_play_animation("ATK_Bomb", true, true)

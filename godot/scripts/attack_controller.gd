@@ -31,6 +31,7 @@ var range_squared = 0.0025
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
+	print('read', self)
 	set_process(true)
 	
 	#Grab the player
@@ -52,20 +53,20 @@ func _ready():
 	sample_player.play("attack_hum", true)
 	
 func _attack_complete_callback():
-	#print("Attack complete!")
+	print("Attack complete!", self)
 	
 	#Did we hit the player?
 	var player_area = player.area
-	var overlap = area.get_overlapping_areas()
-	if area.overlaps_area(player_area):
+	if player_area.overlaps_area(area):
 		#Player is hurt
 		player.take_hit()
 		
 	#We also fade away
 	start_color = end_color
 	end_color = Color(0xFFFFFF00)
+	
 	attack_tween.interpolate_property(self, "color_percent", 0, 1, fade_time, Tween.TRANS_EXPO, Tween.EASE_OUT_IN)
-	attack_tween.interpolate_callback(self, fade_time, "_fade_complete_callback")
+	attack_tween.interpolate_deferred_callback(self, fade_time, "_fade_complete_callback")
 	attack_tween.start()
 	
 	#Play boom
@@ -73,10 +74,13 @@ func _attack_complete_callback():
 	
 func _fade_complete_callback():
 	#We go away
-	#print("Fade complete!")
+	print("Fade complete!", self, is_inside_tree())
 	queue_free()
+	attack_tween.stop_all()
+	pass
 	
 func _process(delta):
 	#Set the color
+	print('erhe')
 	var color = start_color.linear_interpolate(end_color, color_percent)
 	sprite.set_modulate(color)

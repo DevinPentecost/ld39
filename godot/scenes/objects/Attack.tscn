@@ -4,7 +4,7 @@
 [ext_resource path="res://sprites/circle.png" type="Texture" id=2]
 [ext_resource path="res://sfx/sfx_samplelibrary.tres" type="SampleLibrary" id=3]
 
-[sub_resource type="SphereShape" id=1]
+[sub_resource type="SphereShape" id=2]
 
 radius = 0.200239
 
@@ -59,11 +59,11 @@ playback/speed = 1.0
 [node name="Area" type="Area" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0 )
+transform/local = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0.0731125, 0 )
 input/ray_pickable = false
 input/capture_on_drag = false
 shape_count = 1
-shapes/0/shape = SubResource( 1 )
+shapes/0/shape = SubResource( 2 )
 shapes/0/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shapes/0/trigger = false
 space_override = 0
@@ -74,7 +74,7 @@ gravity = 9.8
 linear_damp = 0.1
 angular_damp = 1.0
 priority = 0.0
-monitoring = true
+monitoring = false
 monitorable = true
 collision/layers = 1
 collision/mask = 1
@@ -82,7 +82,7 @@ collision/mask = 1
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 trigger = false
 _update_shape_index = 0
 

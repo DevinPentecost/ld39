@@ -1,25 +1,23 @@
-extends Sprite3D
+extends Spatial
 
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
-var player = null
+
+var enemy = null
+var angle_offset = 0
 var previous_angle = 0
 
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	set_process(true)
-	
-	player = get_parent()
+	enemy = get_parent()
 	
 func _process(delta):
 	
-	#We need to match the angle the player wants
-	if player.all_done:
-		return
-		
-	var angle_delta = player.view_angle - previous_angle
+	#We need to match the angle the enemy wants
+	var angle_delta = enemy.view_angle + angle_offset - previous_angle
 	previous_angle += angle_delta
 	
 	var transform = get_transform()

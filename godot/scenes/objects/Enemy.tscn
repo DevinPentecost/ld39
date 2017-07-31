@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://scripts/enemy_controller.gd" type="Script" id=1]
 [ext_resource path="res://models/boss.scn" type="PackedScene" id=2]
-[ext_resource path="res://sfx/sfx_samplelibrary.tres" type="SampleLibrary" id=3]
+[ext_resource path="res://scripts/enemy_model_controller.gd" type="Script" id=3]
+[ext_resource path="res://sfx/sfx_samplelibrary.tres" type="SampleLibrary" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -24,6 +25,7 @@ playback/speed = 1.0
 [node name="boss" parent="." instance=ExtResource( 2 )]
 
 transform/local = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
+script/script = ExtResource( 3 )
 
 [node name="Area" type="Area" parent="."]
 
@@ -42,7 +44,7 @@ gravity = 9.8
 linear_damp = 0.1
 angular_damp = 1.0
 priority = 0.0
-monitoring = true
+monitoring = false
 monitorable = true
 collision/layers = 1
 collision/mask = 1
@@ -58,7 +60,7 @@ _update_shape_index = 0
 [node name="SamplePlayer" type="SamplePlayer" parent="."]
 
 config/polyphony = 1
-config/samples = ExtResource( 3 )
+config/samples = ExtResource( 4 )
 default/volume_db = 0.0
 default/pitch_scale = 1.0
 default/pan = 0.0

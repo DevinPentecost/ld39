@@ -39,7 +39,7 @@ params/attenuation = 1.0
 [node name="Area" type="Area" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0 )
+transform/local = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0.0653687, 0 )
 input/ray_pickable = false
 input/capture_on_drag = false
 shape_count = 1

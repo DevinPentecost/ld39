@@ -16,6 +16,9 @@ func _ready():
 	
 func _process(delta):
 	
+	if player.all_done:
+		return
+	
 	#We need to match the angle the player wants
 	var angle_delta = player.view_angle + angle_offset - previous_angle
 	previous_angle += angle_delta

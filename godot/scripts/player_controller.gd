@@ -433,6 +433,9 @@ func _handle_player_quit(input_event):
 	get_tree().quit()
 
 func _handle_player_restart(input_event):
-	print("Restarting")
-	get_tree().change_scene(scene_path)
+	print("Restarting breaks everything... ignoring")
+	#get_tree().call_deferred("change_scene", scene_path)
+	
+	
+	
 	
