@@ -140,7 +140,7 @@ func _launch_semi_circle_attack(quadrant=null):
 	tween.start()
 	
 	#Point towards the attack
-	view_angle = (start_angle + end_angle) / 2
+	view_angle = quadrant * PI/2
 	
 	#Play the animation
 	_play_animation("ATK_Sweep", true, true)
