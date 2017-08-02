@@ -30,6 +30,11 @@ var attack_max_range_squared = 0.5
 var animation_blocked = false
 var animation_stopped = false
 
+#hit effect
+var hit_timer = 0
+var material = null
+var emission = 0
+
 #Which way are we viewing?
 var view_angle = 0
 
@@ -42,6 +47,8 @@ func _ready():
 	player = get_node('../Player')
 	area = get_node('./Area')
 	sample_player = get_node("./SamplePlayer")
+	
+	material = load("res://materials/boss1.tres")
 	
 	#Set up the animation player
 	animation_player = get_node('./boss/AnimationPlayer')
@@ -62,6 +69,7 @@ func take_hit():
 	#We die or whatever
 	current_power -= power_lost_on_hit
 	print("UR HURT BADGUY  ", current_power)
+	emission = 0.8
 	
 func _attack_finished():
 	#How long to wait?
@@ -107,6 +115,11 @@ func _process(delta):
 	#Play the idle animation for now
 	if not animation_stopped:
 		_play_animation("Idle")
+		
+	if emission > 0:
+		emission -= 0.05
+		material.set_parameter(3, Color(emission,emission,emission))
+	print(material.get_parameter(3))
 
 func _launch_semi_circle_attack(quadrant=null):
 	#Was a quadrant specified?
