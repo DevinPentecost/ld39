@@ -321,24 +321,6 @@ func _animation_player_finished_callback():
 	animation_blocked = false
 
 func _play_animation(animation_name, blocking=false, override=false):
-	
-	#aim player at mouse
-	
-	var w = get_viewport().get_rect().size.x
-	var h = get_viewport().get_rect().size.y
-	if joys.size() == 0:
-		var x = get_viewport().get_mouse_pos().x
-		if x > w/2 + 200:
-			x = w/2 + 200
-		elif x < w/2 - 200:
-			x = w/2 - 200
-		var y = get_viewport().get_mouse_pos().y
-		if y > h/2 + 200:
-			y = h/2 + 200
-		elif y < h/2 - 200:
-			y = h/2 - 200
-		Input.warp_mouse_pos(Vector2(x,y))
-		view_angle = atan2( 2*PI*(y-h/2)/h,2*PI*(x-w/2)/w)
 		
 	#Are we already playing the animation?
 	if (not animation_blocked or override) and (not animation_player.is_playing() or animation_player.get_current_animation() != animation_name):
@@ -376,8 +358,28 @@ func _input(event):
 		_handle_player_restart(event)
 	
 	#Track the mouse position
+	
+	var w = get_viewport().get_rect().size.x
+	var h = get_viewport().get_rect().size.y
+	var mouse_x= w/2
+	var mouse_y= h/2
 	if event.type == InputEvent.MOUSE_MOTION:
-		mouse_aim_pos = event.pos 
+		#aim player at mouse
+		if joys.size() == 0:
+			var mouse_x= get_viewport().get_mouse_pos().x
+			if mouse_x> w/2 + 200:
+				mouse_x= w/2 + 200
+			elif mouse_x< w/2 - 200:
+				mouse_x= w/2 - 200
+			var mouse_y= get_viewport().get_mouse_pos().y
+			if mouse_y> h/2 + 200:
+				mouse_y= h/2 + 200
+			elif mouse_y< h/2 - 200:
+				mouse_y= h/2 - 200
+			Input.warp_mouse_pos(Vector2(mouse_x,mouse_y))
+			view_angle = atan2( 2*PI*(mouse_y-h/2)/h,2*PI*(mouse_x-w/2)/w)
+		
+		
 
 func _handle_player_aim(input_event):
 	print("Look changed!")
