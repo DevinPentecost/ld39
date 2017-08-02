@@ -281,6 +281,8 @@ func _process(delta):
 	
 	#Drain power
 	current_power -= power_drain_rate*delta
+	if current_power <= 0:
+		alive = false
 	
 	#Don't go over max power
 	if current_power > max_power:
@@ -350,8 +352,8 @@ func _play_animation(animation_name, blocking=false, override=false):
 	
 
 func _input(event):
-	if event.type != InputEvent.MOUSE_MOTION:
-		print(event)
+	#if event.type != InputEvent.MOUSE_MOTION:
+	#	print(event)
 	
 	#What event did we get?
 	if event.is_action("player_aim"):
@@ -434,7 +436,7 @@ func _handle_player_dash(input_event):
 	print("Dashing!")
 	
 	#Can we dodge?
-	if(dash_ready and move_speed > min_dash_speed and current_power > 0):
+	if(dash_ready and move_speed > min_dash_speed and current_power > dash_power_drain):
 		#Put dash on cooldown
 		dash_ready = false
 		dash_timer.start()

@@ -13,15 +13,23 @@ script/script = ExtResource( 1 )
 
 transform/local = Transform( -2.62268e-09, 0, 0.06, 0, 0.06, 0, -0.06, 0, -2.62268e-09, 0, 0, 0 )
 
-[node name="axe" parent="player/rig/Skeleton"]
-
-visibility/visible = false
-
-[node name="battery" parent="player/rig/Skeleton"]
-
-visibility/visible = false
-
 [node name="player" parent="player/rig/Skeleton"]
+
+material/0 = ExtResource( 3 )
+
+[node name="back" parent="player/rig/Skeleton"]
+
+transform/local = Transform( 1, 2.38419e-07, 0, -4.20301e-08, 0.176287, -0.984339, -2.34685e-07, 0.984339, 0.176287, 3.55271e-15, 1.29609, -0.0742292 )
+
+[node name="battery" parent="player/rig/Skeleton/back"]
+
+material/0 = ExtResource( 3 )
+
+[node name="Lhand" parent="player/rig/Skeleton"]
+
+transform/local = Transform( 0.060057, -0.935719, -0.347596, -0.122145, -0.352497, 0.927807, -0.990693, -0.0132642, -0.135463, 0.673694, 0.848741, -0.103589 )
+
+[node name="axe" parent="player/rig/Skeleton/Lhand"]
 
 material/0 = ExtResource( 3 )
 

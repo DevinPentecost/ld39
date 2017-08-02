@@ -246,6 +246,11 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 
 editor/display_folded = true
 
+[node name="Skeleton" parent="Player/player/rig"]
+
+bones/26/bound_childs = [ NodePath("Lhand") ]
+bones/61/bound_childs = [ NodePath("back") ]
+
 [node name="back" parent="Player/player/rig/Skeleton"]
 
 transform/local = Transform( 1, 2.38419e-07, 0, -4.20301e-08, 0.176287, -0.984339, -2.34685e-07, 0.984339, 0.176287, 3.55271e-15, 1.29609, -0.0742292 )
