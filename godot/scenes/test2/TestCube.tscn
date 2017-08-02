@@ -185,7 +185,7 @@ focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 101.0
+margin/left = 99.0
 margin/top = 31.0
 margin/right = 165.0
 margin/bottom = 47.0
@@ -212,7 +212,7 @@ focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 199.0
+margin/left = 201.0
 margin/top = 31.0
 margin/right = 135.0
 margin/bottom = 47.0
@@ -245,11 +245,6 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.754028 )
 [node name="Player" parent="." instance=ExtResource( 11 )]
 
 editor/display_folded = true
-
-[node name="Skeleton" parent="Player/player/rig"]
-
-bones/26/bound_childs = [ NodePath("Lhand") ]
-bones/61/bound_childs = [ NodePath("back") ]
 
 [node name="back" parent="Player/player/rig/Skeleton"]
 

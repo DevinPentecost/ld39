@@ -37,7 +37,7 @@ var use_keyboard = false
 #Movement
 var move_angle = 0
 var move_speed = 0
-var speed = .005
+var speed = .004
 var speed_threshold = 0.1
 
 #Dash related
