@@ -117,10 +117,9 @@ func _process(delta):
 		_play_animation("Idle")
 		
 	if emission > 0:
-		emission -= 0.05
+		emission -= 0.04
 		material.set_parameter(3, Color(emission,emission,emission))
-	print(material.get_parameter(3))
-
+		
 func _launch_semi_circle_attack(quadrant=null):
 	#Was a quadrant specified?
 	if quadrant == null:

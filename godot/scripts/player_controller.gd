@@ -146,7 +146,7 @@ func _ready():
 	
 	#Hide the mouse
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	Input.set_mouse_mode(3)
+	Input.set_mouse_mode(2)
 	
 func _on_dash_timer_timeout():
 	#Re-enable dash
@@ -321,11 +321,21 @@ func _animation_player_finished_callback():
 func _play_animation(animation_name, blocking=false, override=false):
 	
 	#aim player at mouse
+	
+	var w = get_viewport().get_rect().size.x
+	var h = get_viewport().get_rect().size.y
 	if joys.size() == 0:
 		var x = get_viewport().get_mouse_pos().x
+		if x > w/2 + 200:
+			x = w/2 + 200
+		elif x < w/2 - 200:
+			x = w/2 - 200
 		var y = get_viewport().get_mouse_pos().y
-		var w = get_viewport().get_rect().size.x
-		var h = get_viewport().get_rect().size.y
+		if y > h/2 + 200:
+			y = h/2 + 200
+		elif y < h/2 - 200:
+			y = h/2 - 200
+		Input.warp_mouse_pos(Vector2(x,y))
 		view_angle = atan2( 2*PI*(y-h/2)/h,2*PI*(x-w/2)/w)
 		
 	#Are we already playing the animation?
