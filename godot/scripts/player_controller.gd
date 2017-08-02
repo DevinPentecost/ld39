@@ -26,6 +26,14 @@ var use_mouse_aim = false
 var mouse_aim_pos = null
 var joys = null
 
+#Better WASD movement
+var pressed_w = false
+var pressed_a = false
+var pressed_s = false
+var pressed_d = false
+var use_keyboard = false
+
+
 #Movement
 var move_angle = 0
 var move_speed = 0
@@ -234,6 +242,28 @@ func _process(delta):
 		_play_animation("death", true, true)
 		all_done = true
 		return
+		
+	#Are we moving with WASD?
+	if use_keyboard:
+		if pressed_w or pressed_a or pressed_s or pressed_d:
+			#But which way?
+			var x = 0
+			var z = 0
+			if pressed_w:
+				x -= 1
+			if pressed_s:
+				x += 1
+			if pressed_a:
+				z -= 1
+			if pressed_d:
+				z += 1
+			
+			#Now calculate angle and speed
+			move_angle = atan2(x, z)
+			move_speed = Vector2(x, z).length() * speed
+		else:
+			move_angle = 0
+			move_speed = 0
 	
 	#Move according to our vector
 	#Are we moving?
@@ -367,28 +397,23 @@ func _handle_player_move(input_event):
 		#Are we moving fast enough
 		if move_velocity > speed_threshold:
 			move_speed = move_velocity * speed
+			use_keyboard = false
 		else:
 			move_speed = 0
 	else:
 		#Moving via the keys when they are pressed
-		if input_event.is_pressed():
-			#Was it W A S D?
-			if input_event.scancode == KEYBOARD_KEYS.W:
-				move_angle = 1.5*PI
-				move_speed = speed if input_event.pressed else 0
-			elif input_event.scancode == KEYBOARD_KEYS.S:
-				move_angle = .5*PI
-				move_speed = speed if input_event.pressed else 0
-			if input_event.scancode == KEYBOARD_KEYS.A:
-				move_angle = 1*PI
-				move_speed = speed if input_event.pressed else 0
-			elif input_event.scancode == KEYBOARD_KEYS.D:
-				move_angle = 2*PI
-				move_speed = speed if input_event.pressed else 0
-		else:
-			#Stop moving
-			move_angle = 0
-			move_speed = 0
+		var pressed = input_event.is_pressed()
+		use_keyboard = true
+		
+		#Was it W A S D?
+		if input_event.scancode == KEYBOARD_KEYS.W:
+			pressed_w = pressed
+		if input_event.scancode == KEYBOARD_KEYS.S:
+			pressed_s = pressed
+		if input_event.scancode == KEYBOARD_KEYS.A:
+			pressed_a = pressed
+		if input_event.scancode == KEYBOARD_KEYS.D:
+			pressed_d = pressed
 
 func _handle_player_dash(input_event):
 	#Make a dash motion?

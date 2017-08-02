@@ -81,6 +81,5 @@ func _fade_complete_callback():
 	
 func _process(delta):
 	#Set the color
-	print('erhe')
 	var color = start_color.linear_interpolate(end_color, color_percent)
 	sprite.set_modulate(color)
